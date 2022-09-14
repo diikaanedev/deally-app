@@ -1,8 +1,8 @@
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+// ignore: file_names
+int priceFormatByDii(double price) {
+  String v = price.toString();
 
-priceFormatByDii(int price) {
-  FlutterMoneyFormatter fmf = FlutterMoneyFormatter(
-      amount: double.parse(price.toString()),
-      settings: MoneyFormatterSettings(symbol: " NGN"));
-  return fmf.output.symbolOnRight;
+  int d = (v.length % 3);
+
+  return v.length;
 }

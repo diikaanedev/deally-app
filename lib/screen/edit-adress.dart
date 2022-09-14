@@ -1,7 +1,7 @@
 import 'package:deally_app/models/adress-model.dart';
 import 'package:deally_app/screen/adresse-livraison-screen.dart';
 import 'package:deally_app/utils/colors-by-dii.dart';
-import 'package:deally_app/utils/get-position.dart';
+// import 'package:deally_app/utils/get-position.dart';
 import 'package:deally_app/utils/requette-by-dii.dart';
 import 'package:deally_app/widgets/btn-by-dii-connexion.dart';
 import 'package:deally_app/widgets/btn-by-dii.dart';
@@ -273,18 +273,18 @@ class _EditAddressState extends State<EditAddress> {
                                   ? "Geolocated "
                                   : "save geolocation",
                               onTap: () async {
-                                getPosition().then((value) async {
-                                  var d = await getAdress(Coordinates(
-                                      latitude: value.latitude,
-                                      longitude: value.longitude));
-                                  setState(() {
-                                    localizationAdress = d.toString();
-                                  });
-                                });
-                                print(localizationAdress);
-                                setState(() {
-                                  isMapSelect = !isMapSelect;
-                                });
+                                // getPosition().then((value) async {
+                                //   var d = await getAdress(Coordinates(
+                                //       latitude: value.latitude,
+                                //       longitude: value.longitude));
+                                //   setState(() {
+                                //     localizationAdress = d.toString();
+                                //   });
+                                // });
+                                // print(localizationAdress);
+                                // setState(() {
+                                //   isMapSelect = !isMapSelect;
+                                // });
                               },
                               haveBg: isMapSelect,
                             ),

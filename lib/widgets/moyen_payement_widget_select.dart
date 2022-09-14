@@ -63,48 +63,42 @@ class _MoyenPayementWidgetSelectState extends State<MoyenPayementWidgetSelect> {
                   Container(
                     width: constraints.maxWidth * .8,
                     height: constraints.maxHeight * .9,
-                    child: widget.isCreditOrCash
-                        ? Row(
-                            children: [
-                              SizedBox(
-                                width: constraints.maxWidth * .05,
-                              ),
-                              Container(
-                                  width: constraints.maxWidth * .2,
-                                  child: Image.asset(
-                                    widget.asset_url,
-                                    fit: BoxFit.contain,
-                                  )),
-                              SizedBox(
-                                width: constraints.maxWidth * .02,
-                              ),
-                              Text("${widget.title}")
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              SizedBox(
-                                width: constraints.maxWidth * .05,
-                              ),
-                              Column(
-                                children: [
-                                  SizedBox(
-                                    height: constraints.maxHeight * .2,
-                                  ),
-                                  Container(
-                                      width: constraints.maxWidth * .7,
-                                      child: Text("${widget.title}")),
-                                  Container(
-                                      width: constraints.maxWidth * .7,
-                                      child: Text(
-                                        "{${widget.subTitle}}",
-                                        style: TextStyle(
-                                            color: meuveFonce, fontSize: 12),
-                                      )),
-                                ],
-                              )
-                            ],
-                          ),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: constraints.maxWidth * .05,
+                        ),
+                        Container(
+                            width: constraints.maxWidth * .12,
+                            child: Image.asset(
+                              widget.asset_url,
+                              fit: BoxFit.contain,
+                            )),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: constraints.maxWidth * .02,
+                            ),
+                            Column(
+                              children: [
+                                Spacer(),
+                                Container(
+                                    width: constraints.maxWidth * .6,
+                                    child: Text("${widget.title}")),
+                                Container(
+                                    width: constraints.maxWidth * .6,
+                                    child: Text(
+                                      "${widget.subTitle}",
+                                      style: TextStyle(
+                                          color: meuveFonce, fontSize: 10),
+                                    )),
+                                Spacer(),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                     decoration: BoxDecoration(
                         border: Border.all(color: gris),
                         borderRadius: BorderRadius.circular(5.0)),

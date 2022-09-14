@@ -661,6 +661,7 @@ class _RegisterOneState extends State<RegisterOne> {
                                                                 .indicatif +
                                                             telephone.text
                                                   }).then((value) async {
+                                                print(value);
                                                 if (value['status'] == 200) {
                                                   await SharedPreferences
                                                           .getInstance()

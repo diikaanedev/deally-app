@@ -97,7 +97,7 @@ class _ProduitHomeWidgetFournisseurState
                                 width: constraints.maxWidth * .02,
                               ),
                               Text(
-                                'Warehouse ${widget.produitModel!.location}',
+                                'Warehouse ',
                                 style: TextStyle(fontWeight: FontWeight.w200),
                               )
                             ],

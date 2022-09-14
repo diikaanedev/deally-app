@@ -275,18 +275,18 @@ class _AdresseLivraisonAjoutScreenState
                                   ? "Geolocated "
                                   : "save geolocation",
                               onTap: () async {
-                                getPosition().then((value) async {
-                                  var d = await getAdress(Coordinates(
-                                      latitude: value.latitude,
-                                      longitude: value.longitude));
-                                  setState(() {
-                                    localizationAdress = d.toString();
-                                  });
-                                });
-                                print(localizationAdress);
-                                setState(() {
-                                  isMapSelect = !isMapSelect;
-                                });
+                                // getPosition().then((value) async {
+                                //   var d = await getAdress(Coordinates(
+                                //       latitude: value.latitude,
+                                //       longitude: value.longitude));
+                                //   setState(() {
+                                //     localizationAdress = d.toString();
+                                //   });
+                                // });
+                                // print(localizationAdress);
+                                // setState(() {
+                                //   isMapSelect = !isMapSelect;
+                                // });
                               },
                               haveBg: isMapSelect,
                             ),

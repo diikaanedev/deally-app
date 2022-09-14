@@ -85,17 +85,17 @@ class _PaiementScreenState extends State<PaiementScreen> {
                           height: constraints.maxHeight * .12,
                           width: constraints.maxWidth,
                           child: MoyenPayementWidgetSelect(
-                            asset_url: "",
-                            onTap: () => {
+                            asset_url: "assets/images/banktrfrr.png",
+                            onTap: () async {
                               setState(
                                 () {
                                   choix = 0;
                                 },
-                              )
+                              );
                             },
-                            title: "Transfert",
+                            title: "Pay with bank transfer at delivery",
                             isCreditOrCash: false,
-                            subTitle: "",
+                            subTitle: "UBA (Deally) : 2174858061",
                             isDefault: choix == 0,
                           ),
                         ),
@@ -106,17 +106,18 @@ class _PaiementScreenState extends State<PaiementScreen> {
                           height: constraints.maxHeight * .12,
                           width: constraints.maxWidth,
                           child: MoyenPayementWidgetSelect(
-                            asset_url: "",
-                            onTap: () => {
+                            asset_url: "assets/images/pos-removebg-preview.png",
+                            onTap: () async {
                               setState(
                                 () {
                                   choix = 1;
                                 },
-                              )
+                              );
                             },
                             isDefault: choix == 1,
                             isCreditOrCash: false,
-                            title: "Request for credit",
+                            title: "Pay with POS at delivery",
+                            subTitle: "",
                           ),
                         ),
                         SizedBox(
@@ -126,18 +127,18 @@ class _PaiementScreenState extends State<PaiementScreen> {
                           height: constraints.maxHeight * .12,
                           width: constraints.maxWidth,
                           child: MoyenPayementWidgetSelect(
-                            asset_url: "",
-                            onTap: () => {
+                            asset_url:
+                                "assets/images/cash-removebg-preview.png",
+                            onTap: () async {
                               setState(
                                 () {
-                                  choix = 4;
+                                  choix = 2;
                                 },
-                              )
+                              );
                             },
-                            subTitle:
-                                "To be paid to the deliverer at the time of delivery.",
+                            subTitle: "",
                             isCreditOrCash: false,
-                            isDefault: choix == 4,
+                            isDefault: choix == 2,
                             title: "Cash Payment at Delivery",
                           ),
                         ),
@@ -148,17 +149,18 @@ class _PaiementScreenState extends State<PaiementScreen> {
                           height: constraints.maxHeight * .12,
                           width: constraints.maxWidth,
                           child: MoyenPayementWidgetSelect(
-                            asset_url: "assets/images/wave.png",
-                            onTap: () => {
+                            asset_url: "assets/images/advans_logo.png",
+                            onTap: () async {
                               setState(
                                 () {
                                   choix = 3;
                                 },
-                              )
+                              );
                             },
-                            isCreditOrCash: false,
-                            subTitle: "Refundable within 2 weeks .",
-                            title: "On account",
+                            isCreditOrCash: true,
+                            subTitle:
+                                "To be validate within 3 days by our partner",
+                            title: "Pay by microfinancing",
                             isDefault: choix == 3,
                           ),
                         ),
@@ -183,6 +185,8 @@ class _PaiementScreenState extends State<PaiementScreen> {
                             await SharedPreferences.getInstance().then(
                                 (prefs) =>
                                     prefs.setInt("paiement_method", choix));
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
                           },
                           child: Container(
                             width: size.width * .9,

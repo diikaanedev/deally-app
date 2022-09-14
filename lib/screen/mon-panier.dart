@@ -258,7 +258,7 @@ class _MonPanierState extends State<MonPanier> {
                             width: size.width * .05,
                           ),
                           Text(
-                            '${priceFormatByDii(priceTotalPannier)} ',
+                            '$priceTotalPannier NGN ',
                             style: TextStyle(
                                 fontSize: size.width * .030,
                                 fontWeight: FontWeight.w300,

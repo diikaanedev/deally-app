@@ -148,7 +148,7 @@ class _ListProduitMonPannierItemWidgetState
                             height: constraints.maxHeight * .4,
                             child: Center(
                               child: Text(
-                                "${priceFormatByDii(widget.orderItemModel.price)}",
+                                "${widget.orderItemModel.price}  NGN",
                                 style: TextStyle(
                                     fontSize: constraints.maxWidth * .02,
                                     fontWeight: FontWeight.w300),

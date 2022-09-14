@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 
 class MoyenPayementWidget extends StatefulWidget {
   final String asseturl;
-  const MoyenPayementWidget({Key? key, required this.asseturl})
+  final String title;
+  final String subTitle;
+  const MoyenPayementWidget(
+      {Key? key,
+      required this.asseturl,
+      required this.title,
+      required this.subTitle})
       : super(key: key);
 
   @override
@@ -65,7 +71,31 @@ class _MoyenPayementWidgetState extends State<MoyenPayementWidget> {
                         SizedBox(
                           width: constraints.maxWidth * .02,
                         ),
-                        Image.asset(widget.asseturl),
+                        SizedBox(
+                            width: constraints.maxWidth * .15,
+                            child: Image.asset(widget.asseturl)),
+                        SizedBox(
+                          width: constraints.maxWidth * .02,
+                        ),
+                        Column(
+                          children: [
+                            Spacer(),
+                            Container(
+                                width: constraints.maxWidth * .7,
+                                child: Text(
+                                  "${widget.title}",
+                                  style: TextStyle(color: noir, fontSize: 12),
+                                )),
+                            Container(
+                                width: constraints.maxWidth * .7,
+                                child: Text(
+                                  "${widget.subTitle}",
+                                  style: TextStyle(
+                                      color: meuveFonce, fontSize: 10),
+                                )),
+                            Spacer(),
+                          ],
+                        )
                       ],
                     )))
           ],

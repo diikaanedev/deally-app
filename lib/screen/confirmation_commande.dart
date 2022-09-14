@@ -3,6 +3,7 @@ import 'package:deally_app/models/order-item-model.dart';
 import 'package:deally_app/screen/commercants/compte-ui/moyen_payement_widget.dart';
 import 'package:deally_app/screen/commercants/compte-ui/paiement-scren.dart';
 import 'package:deally_app/screen/payement-reussi.dart';
+import 'package:deally_app/screen/webviewexemple.dart';
 import 'package:deally_app/utils/colors-by-dii.dart';
 import 'package:deally_app/utils/requette-by-dii.dart';
 import 'package:deally_app/widgets/adresse_livraison_widget.dart';
@@ -11,6 +12,9 @@ import 'package:deally_app/widgets/list_produit_item_widget_cmd.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uuid/uuid.dart';
+// import 'package:webviewx/webviewx.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 
 late _ConfirmationCommandeState confirmCmd;
 
@@ -26,9 +30,16 @@ class ConfirmationCommande extends StatefulWidget {
 }
 
 class _ConfirmationCommandeState extends State<ConfirmationCommande> {
+  var publicKey = 'pk_test_6104b6fa33e41815c32981583ef6ad2c6f5b7dc4';
+  final plugin = PaystackPlugin();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late Size size;
-  String assetUlr = "assets/images/orange-money.png";
+  String assetUlr = "assets/images/banktrfrr.png";
+  int choixPaiement = 0;
+  String title = "Pay with bank transfer at delivery";
+  String subTitle = "UBA (Deally) : 2174858061";
   int priceTotalPannier = 0;
+  // late WebViewXController controller;
 
   List<AdresseModel> address = [];
 
@@ -37,6 +48,7 @@ class _ConfirmationCommandeState extends State<ConfirmationCommande> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    plugin.initialize(publicKey: publicKey);
     getAssetUrlPaiement();
     getListOrderItem();
     getAddressDefault();
@@ -44,25 +56,45 @@ class _ConfirmationCommandeState extends State<ConfirmationCommande> {
 
   getAssetUrlPaiement() async {
     await SharedPreferences.getInstance().then((prefs) {
+      print(prefs.getInt("paiement_method"));
       if (prefs.containsKey("paiement_method")) {
         if (prefs.getInt("paiement_method") == 0) {
           setState(() {
-            assetUlr = "assets/images/orange-money.png";
+            assetUlr = "assets/images/banktrfrr.png";
+            choixPaiement = 0;
+            title = "Pay with bank transfer at delivery";
+            subTitle = "UBA (Deally) : 2174858061";
           });
         }
         if (prefs.getInt("paiement_method") == 1) {
           setState(() {
-            assetUlr = "assets/images/mtn-logo.png";
+            assetUlr = "assets/images/pos-removebg-preview.png";
+            title = "Pay with POS at delivery";
+            choixPaiement = 1;
+            subTitle = "";
           });
         }
         if (prefs.getInt("paiement_method") == 2) {
           setState(() {
-            assetUlr = "assets/images/wave.png";
+            assetUlr = "assets/images/cash-removebg-preview.png";
+            choixPaiement = 2;
+            title = "Cash Payment at Delivery";
+            subTitle = "";
+          });
+        }
+        if (prefs.getInt("paiement_method") == 3) {
+          setState(() {
+            assetUlr = "assets/images/advans_logo.png";
+            choixPaiement = 3;
+            title = "Pay by microfinancing";
+            subTitle = "To be validate within 3 days by our partner";
           });
         }
       } else {
         setState(() {
-          assetUlr = "assets/images/orange-money.png";
+          assetUlr = "assets/images/advans_logo.png";
+          title = "Pay by microfinancing";
+          subTitle = "To be validate within 3 days by our partner";
         });
       }
     });
@@ -166,16 +198,15 @@ class _ConfirmationCommandeState extends State<ConfirmationCommande> {
                       ),
                       Center(
                         child: GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const PaiementScreen(),
-                              )),
+                          onTap: () =>
+                              Navigator.popAndPushNamed(context, "/paiement"),
                           child: Container(
                             height: constraints.maxHeight * .15,
                             width: constraints.maxWidth * .9,
                             child: MoyenPayementWidget(
                               asseturl: assetUlr,
+                              subTitle: subTitle,
+                              title: title,
                             ),
                             decoration: BoxDecoration(
                                 color: gris,
@@ -351,34 +382,67 @@ class _ConfirmationCommandeState extends State<ConfirmationCommande> {
                         child: BtnByDiiConnexion(
                             titre: "Pay now ",
                             onTap: () async {
+                              const uuid = Uuid();
                               if (address.isNotEmpty) {
-                                await postResponse(url: '/orders', body: {
-                                  "livraison": address.first.id,
-                                  "items":
-                                      listeOrderItems.map((e) => e.id).toList(),
-                                  "amount": (priceTotalPannier +
-                                          (priceTotalPannier * .22).round())
-                                      .toString(),
-                                }).then((value) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              PayementReussiScreen(
-                                                id: value['body']['data']
-                                                    ['_id'],
-                                              )));
-                                });
+                                if (choixPaiement == 0) {
+                                  Charge charge = Charge()
+                                    ..amount = (priceTotalPannier +
+                                        (priceTotalPannier * .22).round())
+                                    ..reference = uuid.v4()
+                                    ..email = 'diikaanedev@gmail.com';
+                                  CheckoutResponse response =
+                                      await plugin.checkout(
+                                    context,
+                                    method: CheckoutMethod
+                                        .card, // Defaults to CheckoutMethod.selectable
+                                    charge: charge,
+                                  );
+
+                                  print(response.message);
+                                  print(response.status);
+                                  print(response.reference);
+                                  await postResponse(url: '/orders', body: {
+                                    "livraison": address.first.id,
+                                    "typePaiment": choixPaiement,
+                                    "refPaid": response.reference,
+                                    "paiStatus": response.status.toString(),
+                                    "items": listeOrderItems
+                                        .map((e) => e.id)
+                                        .toList(),
+                                    "amount": (priceTotalPannier +
+                                            (priceTotalPannier * .22).round())
+                                        .toString(),
+                                  }).then((value) async {
+                                    SharedPreferences.getInstance()
+                                        .then((prefs) {
+                                      prefs.setString("paiementReussi",
+                                          value['body']['data']['_id']);
+                                    });
+                                    Navigator.popAndPushNamed(
+                                        context, "/paiement-reusi");
+                                  });
+                                } else {
+                                  await postResponse(url: '/orders', body: {
+                                    "livraison": address.first.id,
+                                    "typePaiment": choixPaiement,
+                                    "items": listeOrderItems
+                                        .map((e) => e.id)
+                                        .toList(),
+                                    "amount": (priceTotalPannier +
+                                            (priceTotalPannier * .22).round())
+                                        .toString(),
+                                  }).then((value) async {
+                                    SharedPreferences.getInstance()
+                                        .then((prefs) {
+                                      prefs.setString("paiementReussi",
+                                          value['body']['data']['_id']);
+                                    });
+                                    Navigator.popAndPushNamed(
+                                        context, "/paiement-reusi");
+                                  });
+                                }
                               } else {
-                                Fluttertoast.showToast(
-                                    msg:
-                                        "You have a delivery address or you have not selected it",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
+                                Navigator.popAndPushNamed(context, '/address');
                               }
                             },
                             bgNormal: 1),

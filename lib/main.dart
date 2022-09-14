@@ -1,23 +1,31 @@
 // @dart=2.9
+import 'package:deally_app/screen/adresse-livraison-screen.dart';
+import 'package:deally_app/screen/commercants/compte-ui/paiement-scren.dart';
 import 'package:deally_app/screen/fournisseur/home-page-screen.dart';
 import 'package:deally_app/screen/fournisseur/home-screen.dart';
 import 'package:deally_app/screen/fournisseur/menu-profile-fournisseur-screen.dart';
 import 'package:deally_app/screen/loading-screen.dart';
+import 'package:deally_app/screen/payement-reussi.dart';
 import 'package:deally_app/screen/profile-menu-screen.dart';
 import 'package:deally_app/screen/recouver-password.dart';
 import 'package:deally_app/screen/register-one.dart';
 import 'package:deally_app/utils/colors-by-dii.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,6 +40,9 @@ class MyApp extends StatelessWidget {
         '/loading': (context) => const LoadingScreen(),
         '/choice-register': (context) => const RegisterOne(),
         '/recouver-password': (context) => const RecouverPassword(),
+        '/address': (context) => const AdresseLivraisonScreen(),
+        '/paiement': (context) => const PaiementScreen(),
+        '/paiement-reusi': (context) => const PayementReussiScreen(),
         '/home-menu': (context) => FutureBuilder<SharedPreferences>(
               future: SharedPreferences.getInstance(),
               builder: (context, snapshot) {

@@ -9,10 +9,12 @@ import 'package:deally_app/utils/requette-by-dii.dart';
 import 'package:deally_app/widgets/produit-home-widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PayementReussiScreen extends StatefulWidget {
-  final String id;
-  const PayementReussiScreen({Key? key, required this.id}) : super(key: key);
+  const PayementReussiScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<PayementReussiScreen> createState() => _PayementReussiScreenState();
@@ -21,6 +23,7 @@ class PayementReussiScreen extends StatefulWidget {
 class _PayementReussiScreenState extends State<PayementReussiScreen> {
   late Size size;
   String ref = "";
+  String typePaiment = "";
   List<Container> listeWidget = [];
   List<ProduitModel> listeProduct = [];
 
@@ -33,10 +36,14 @@ class _PayementReussiScreenState extends State<PayementReussiScreen> {
   }
 
   getOrder() async {
-    await getResponse(url: '/orders/' + widget.id).then((value) {
-      print(value);
-      setState(() {
-        ref = value['data']['reference'];
+    SharedPreferences.getInstance().then((prefs) async {
+      await getResponse(url: '/orders/${prefs.getString("paiementReussi")}')
+          .then((value) {
+        print(value);
+        setState(() {
+          ref = value['data']['reference'];
+          typePaiment = value['data']['typePaiment'];
+        });
       });
     });
   }
@@ -105,13 +112,23 @@ class _PayementReussiScreenState extends State<PayementReussiScreen> {
                               SizedBox(
                                 width: constraints.maxWidth * .05,
                               ),
-                              Text(
-                                "Successful payment",
-                                style: TextStyle(
-                                    fontSize: constraints.maxHeight * .025,
-                                    fontWeight: FontWeight.w300,
-                                    color: noir),
-                              )
+                              typePaiment == "BANK_TRANSFERT"
+                                  ? Text(
+                                      "Successful payment",
+                                      style: TextStyle(
+                                          fontSize:
+                                              constraints.maxHeight * .025,
+                                          fontWeight: FontWeight.w300,
+                                          color: noir),
+                                    )
+                                  : Text(
+                                      "Payment to be confirmed ",
+                                      style: TextStyle(
+                                          fontSize:
+                                              constraints.maxHeight * .025,
+                                          fontWeight: FontWeight.w300,
+                                          color: noir),
+                                    )
                             ],
                           ),
                           SizedBox(

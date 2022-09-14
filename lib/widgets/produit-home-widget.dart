@@ -117,7 +117,7 @@ class _ProduitHomeWidgetState extends State<ProduitHomeWidget> {
                                   size: constraints.maxWidth * .07,
                                 ),
                                 Text(
-                                  '${widget.produitModel!.location == "" ? "Lagos" : widget.produitModel!.location}',
+                                  "Lagos",
                                   style: TextStyle(fontWeight: FontWeight.w200),
                                 )
                               ],
